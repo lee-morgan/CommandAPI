@@ -51,6 +51,7 @@ namespace CommandAPI
             {
                 endpoints.MapControllers();
             });
+            
         }
     }
 }
