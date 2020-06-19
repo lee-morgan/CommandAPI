@@ -11,6 +11,8 @@ using Microsoft.Extensions.Hosting;
 using CommandAPI.Models;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+
 
 namespace CommandAPI
 {
@@ -33,6 +35,14 @@ namespace CommandAPI
             builder.Password = Configuration["Password"];
             services.AddDbContext<CommandContext>(options => 
                 options.UseNpgsql(builder.ConnectionString));
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options => 
+                {
+                    options.Audience = Configuration["ResourceId"];
+                    options.Authority = $"{Configuration["Instance"]} {Configuration["TenantId"]}";
+                });
+
             services.AddControllers();
         }
 
@@ -46,6 +56,9 @@ namespace CommandAPI
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
