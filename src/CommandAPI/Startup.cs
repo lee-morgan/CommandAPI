@@ -40,7 +40,7 @@ namespace CommandAPI
                 .AddJwtBearer(options => 
                 {
                     options.Audience = Configuration["ResourceId"];
-                    options.Authority = $"{Configuration["Instance"]} {Configuration["TenantId"]}";
+                    options.Authority = $"{Configuration["Instance"]}{Configuration["TenantId"]}";
                 });
 
             services.AddControllers();
@@ -58,13 +58,13 @@ namespace CommandAPI
             app.UseRouting();
 
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
-            
         }
     }
 }
